@@ -25,6 +25,7 @@ You can install the latest stable version from `PyPI <http://pypi.python.org/pyp
 
 **(recommended)**
 Or, you can install the latest development version from `GitHub <https://github.com/the-jojo/pydubins>`_
+
 .. code-block:: console
 
     $ pip install git+git://github.com/the-jojo/pydubins.git
