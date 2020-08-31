@@ -16,17 +16,18 @@ This code is primarily a Cython wrapper of https://github.com/AndrewWalker/Dubin
 Installing
 ==========
 
+**(not recommended)**
 You can install the latest stable version from `PyPI <http://pypi.python.org/pypi/dubins>`_
 
 .. code-block:: console
 
     $ pip install dubins
 
-Or, you can install the latest development version from `GitHub <https://github.com/AndrewWalker/pydubins>`_
-
+**(recommended)**
+Or, you can install the latest development version from `GitHub <https://github.com/the-jojo/pydubins>`_
 .. code-block:: console
 
-    $ pip install git+git://github.com/AndrewWalker/pydubins.git
+    $ pip install git+git://github.com/the-jojo/pydubins.git
 
 Example
 =======
