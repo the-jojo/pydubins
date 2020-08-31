@@ -20,6 +20,11 @@
 cimport cython
 cimport core
 from libc.stdlib cimport malloc, free
+import numpy as np
+cimport numpy as cnp
+import math
+
+DTYPE = np.float_
 
 
 cdef inline int callback(double q[3], double t, void* f):
@@ -60,6 +65,41 @@ cdef class _DubinsPath:
         if code != 0:
             raise RuntimeError('path did not initialise correctly')
         return path
+
+    @staticmethod
+    def shortest_paths_2(q0, p1, p2, rho, alpha):
+        cdef float h1, h2
+        cdef double d1, d2
+        cdef (double, double, double) q1, q2
+        
+        cdef _DubinsPath path_1, path_2
+
+        cdef double best_length = math.inf
+        cdef _DubinsPath best_1_path = None
+        cdef _DubinsPath best_2_path = None
+        cdef cnp.ndarray range = np.arange(-math.pi, math.pi, alpha)
+
+        for h1 in range:
+            q1 = (*p1, h1) 
+            # path from 0 to 1
+            path_1 = shortest_path(q0, q1, rho) 
+            d1 = path_1.path_length()
+            if p2 is not None:
+                for h2 in range:
+                    q2 = (*p2, h2)
+                    # path from 1 to 2
+                    path_2 = shortest_path(q1, q2, rho)
+                    d2 = d1 + path_2.path_length()
+                    if d2 < best_length:
+                        best_length = d2
+                        best_1_path = path_1
+                        best_2_path = path_2
+            else:
+                if d1 < best_length:
+                    best_length = d1
+                    best_1_path = path_1
+        
+        return best_1_path, best_2_path
 
     @staticmethod
     def path(q0, q1, rho, word):
@@ -190,7 +230,7 @@ def norm_path(alpha, beta, delta, word):
     ----------
     alpha : float
         the initial orientation 
-    beta : flaot
+    beta : float
         the final orientation
     delta : float
         the distance between configurations
@@ -211,4 +251,30 @@ def norm_path(alpha, beta, delta, word):
     q1 = [ delta, 0.0, beta ]
     return path(q0, q1, 1.0, word)
 
+def shortest_paths_2(q0, p1, p2, rho, alpha):
+    '''Shortest path between 1 dubins configuration and 2 next points
 
+    Parameters
+    ----------
+    q0 : array-like
+        the initial configuration
+    p1 : array-like
+        the second position
+    p2 : array-like
+        the final position
+    rho : float
+        the turning radius of the vehicle
+    alpha: float
+        the resolution to use for intermediary and end headings
+
+    Raises
+    ------
+    RuntimeError
+        If the construction of one path fails
+
+    Returns
+    -------
+    path : DubinsPath 
+        The shortest path
+    '''
+    return _DubinsPath.shortest_paths_2(q0, p1, p2, rho, alpha) 
