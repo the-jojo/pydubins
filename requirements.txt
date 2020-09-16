@@ -1,5 +1,3 @@
 Cython
-numpydoc
 sphinx
-numpy
 math

@@ -26,6 +26,7 @@ else:
         )
     ]
 
+
 def read(filename):
     path = os.path.join(os.path.dirname(__file__), filename)
     contents = open(path).read()
@@ -39,7 +40,7 @@ setup(
     long_description = read('README.rst'),
     author       = "Andrew Walker",
     author_email = "walker.ab@gmail.com",
-    url          = "http://github.com/AndrewWalker/pydubins",
+    url          = "http://github.com/the-jojo/pydubins",
     license      = "MIT",
     classifiers  = [
         'Development Status :: 4 - Beta',
@@ -52,11 +53,12 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Operating System :: POSIX :: Linux',
         'Topic :: Scientific/Engineering :: Mathematics',
     ],
     cmdclass     = cmdclass,
     ext_modules  = ext_modules,
-    install_requires = ['numpy', 'Cython', 'sphinx', 'math']
 )
 

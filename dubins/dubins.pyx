@@ -20,11 +20,11 @@
 cimport cython
 cimport core
 from libc.stdlib cimport malloc, free
-import numpy as np
-cimport numpy as cnp
+#import numpy as np
+#cimport numpy as cnp
 import math
 
-DTYPE = np.float_
+#DTYPE = np.float_
 
 
 cdef inline int callback(double q[3], double t, void* f):
@@ -70,23 +70,24 @@ cdef class _DubinsPath:
     def shortest_paths_2(q0, p1, p2, rho, alpha):
         cdef float h1, h2
         cdef double d1, d2
-        cdef (double, double, double) q1, q2
-        
+        cdef double q1[3]
+        cdef double q2[3]
+
         cdef _DubinsPath path_1, path_2
 
         cdef double best_length = math.inf
         cdef _DubinsPath best_1_path = None
         cdef _DubinsPath best_2_path = None
-        cdef cnp.ndarray range = np.arange(-math.pi, math.pi, alpha)
 
-        for h1 in range:
-            q1 = (*p1, h1) 
+        h1 = -math.pi
+        while h1 < math.pi:
+            q1 = [*p1, h1]
             # path from 0 to 1
-            path_1 = shortest_path(q0, q1, rho) 
+            path_1 = shortest_path(q0, q1, rho)
             d1 = path_1.path_length()
             if p2 is not None:
                 for h2 in range:
-                    q2 = (*p2, h2)
+                    q2 = [*p2, h2]
                     # path from 1 to 2
                     path_2 = shortest_path(q1, q2, rho)
                     d2 = d1 + path_2.path_length()
@@ -98,7 +99,8 @@ cdef class _DubinsPath:
                 if d1 < best_length:
                     best_length = d1
                     best_1_path = path_1
-        
+            h1 = h1 + alpha
+
         return best_1_path, best_2_path
 
     @staticmethod
@@ -277,4 +279,4 @@ def shortest_paths_2(q0, p1, p2, rho, alpha):
     path : DubinsPath 
         The shortest path
     '''
-    return _DubinsPath.shortest_paths_2(q0, p1, p2, rho, alpha) 
+    return _DubinsPath.shortest_paths_2(q0, p1, p2, rho, alpha)
