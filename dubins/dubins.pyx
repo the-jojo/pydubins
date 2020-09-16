@@ -81,13 +81,14 @@ cdef class _DubinsPath:
 
         h1 = -math.pi
         while h1 < math.pi:
-            q1 = [*p1, h1]
+            q1 = [p1[0], p1[1], h1]
             # path from 0 to 1
             path_1 = shortest_path(q0, q1, rho)
             d1 = path_1.path_length()
             if p2 is not None:
-                for h2 in range:
-                    q2 = [*p2, h2]
+                h2 = -math.pi
+                while h2 < math.pi:
+                    q2 = [p2[0], p2[1], h2]
                     # path from 1 to 2
                     path_2 = shortest_path(q1, q2, rho)
                     d2 = d1 + path_2.path_length()
@@ -95,6 +96,7 @@ cdef class _DubinsPath:
                         best_length = d2
                         best_1_path = path_1
                         best_2_path = path_2
+                    h2 = h2 + alpha
             else:
                 if d1 < best_length:
                     best_length = d1
