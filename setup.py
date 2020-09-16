@@ -57,6 +57,6 @@ setup(
     ],
     cmdclass     = cmdclass,
     ext_modules  = ext_modules,
-    install_requires = ['numpy']
+    install_requires = ['numpy', 'Cython' 'numpydoc', 'sphinx', 'math']
 )
 
